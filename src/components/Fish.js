@@ -3,7 +3,7 @@ import {formatPrice} from '../helpers';
 
 class Fish extends React.Component {
   render() {
-    const {details} = this.props;
+    const {details, index} = this.props;
     // checks if details.status = available
     const isAvailable = details.status === 'available'
     const buttonText = isAvailable ? 'Add to order' : 'Sold Out'
@@ -17,7 +17,7 @@ class Fish extends React.Component {
         </h3>
         {details.name}
         <p>{details.desc}</p>
-        <button>{buttonText}</button>
+        <button onClick={() => this.props.addToOrder(index)} disabled={!isAvailable}>{buttonText}</button>
       </li>
     )
   }

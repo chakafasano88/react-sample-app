@@ -14,7 +14,7 @@ class StorePicker extends React.Component{
     const storeId = this.storeInput.value
     this.context.router.transitionTo(`/store/${storeId}`);
   }
-  // Render methods are bound to component(this will = the class)
+  // Render methods are bound to component(this = the class)
   render(){
     return(
       <div>

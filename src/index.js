@@ -9,7 +9,7 @@ import './css/style.css'
 // Statless functional component
 const Root = () => {
   return(
-    // Wrap the entire router with '<br owserrouter>'
+    // Wrap the entire router with '<browser router>'
     <BrowserRouter>
       <div>
         {/* If one match is pattern '/', show component 'StorePicker'
