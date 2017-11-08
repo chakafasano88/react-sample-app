@@ -19,8 +19,10 @@ class App extends React.Component {
     };
     // Binds your methods to the App
     this.addFish = this.addFish.bind(this);
+    this.updateFish = this.updateFish.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
     this.addToOrder = this.addToOrder.bind(this);
+    this.removeFish = this.removeFish.bind(this);
   }
 //Invokes immediately before rendering occurs
   addFish(fish) {
@@ -33,6 +35,18 @@ class App extends React.Component {
     // gives each fish an time Id
     fishes[`fish-${timestamp}`] = fish;
     // set state. Set state of the thing that is changed
+    this.setState({ fishes });
+  }
+
+  updateFish(key, updatedFish){
+    const fishes = {...this.state.fishes}
+    fishes[key] = updatedFish
+    this.setState({fishes })
+  }
+
+  removeFish(key){
+    const fishes = {...this.state.fishes}
+    fishes[key] = null;
     this.setState({ fishes });
   }
 
@@ -51,6 +65,26 @@ class App extends React.Component {
     order[key] = order[key] + 1 || 1;
     // update state
     this.setState({ order });
+  }
+
+  componentWillMount(){
+    this.ref = base.syncState(`${this.props.params.storeId}/fishes`
+      ,{
+      context: this,
+      state: 'fishes'
+    })
+  }
+
+  componentWillUnmount(){
+    base.removeBinding(this.ref)
+  }
+// Setting Local Storage
+// localStorage.setItem('') sets a key and value
+// Cannot store objects inside local storage. Only strings!
+  componentWillUpdate(nextProps, nextState){
+    console.log('Something Changed');
+    localStorage.setItem(`order-${this.props.params.StoreId}`,
+      JSON.stringify(nextState.order))
   }
 
   render() {
@@ -78,8 +112,18 @@ class App extends React.Component {
         {/* Props allow us to access, any information we put in to them..
           functions, strings, booleans etc...
            */}
-        <Order fishes={this.state.fishes} order={this.state.order} />
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          params={this.props.params}
+        />
+        <Inventory
+          addFish={this.addFish}
+          loadSamples={this.loadSamples}
+          fishes={this.state.fishes}
+          updateFish={this.updateFish}
+          removeFish={this.removeFish}
+        />
       </div>
     );
   }
